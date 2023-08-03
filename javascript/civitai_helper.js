@@ -24,7 +24,7 @@ function ch_gradio_version(){
     } else {
         return "3.23.0";
     }
-    
+
 }
 
 
@@ -141,7 +141,7 @@ function getActiveNegativePrompt() {
 async function open_model_url(event, model_type, search_term){
     console.log("start open_model_url");
 
-    //get hidden components of extension 
+    //get hidden components of extension
     let js_open_url_btn = gradioApp().getElementById("ch_js_open_url_btn");
     if (!js_open_url_btn) {
         return
@@ -193,7 +193,7 @@ async function open_model_url(event, model_type, search_term){
 
     }
 
-    
+
     console.log("end open_model_url");
 
 
@@ -202,7 +202,7 @@ async function open_model_url(event, model_type, search_term){
 function add_trigger_words(event, model_type, search_term){
     console.log("start add_trigger_words");
 
-    //get hidden components of extension 
+    //get hidden components of extension
     let js_add_trigger_words_btn = gradioApp().getElementById("ch_js_add_trigger_words_btn");
     if (!js_add_trigger_words_btn) {
         return
@@ -238,13 +238,13 @@ function add_trigger_words(event, model_type, search_term){
     event.stopPropagation()
     event.preventDefault()
 
-    
+
 }
 
 function use_preview_prompt(event, model_type, search_term){
     console.log("start use_preview_prompt");
 
-    //get hidden components of extension 
+    //get hidden components of extension
     let js_use_preview_prompt_btn = gradioApp().getElementById("ch_js_use_preview_prompt_btn");
     if (!js_use_preview_prompt_btn) {
         return
@@ -296,7 +296,7 @@ function ch_dl_model_new_version(event, model_path, version_id, download_url){
         return
     }
 
-    //get hidden components of extension 
+    //get hidden components of extension
     let js_dl_model_new_version_btn = gradioApp().getElementById("ch_js_dl_model_new_version_btn");
     if (!js_dl_model_new_version_btn) {
         return
@@ -386,7 +386,7 @@ onUiLoaded(() => {
         if (!replace_preview_text) {
             replace_preview_text = "replace preview";
         }
-        
+
 
 
         // get component
@@ -434,7 +434,7 @@ onUiLoaded(() => {
                 .find(el => el.closest('.tabitem').style.display === 'block')
                 ?.id.match(/^(txt2img|img2img)_(.+)_cards$/)[2]
 
-                
+
             console.log("found active tab: " + active_extra_tab);
 
             switch (active_extra_tab) {
@@ -508,10 +508,23 @@ onUiLoaded(() => {
                     metadata_button = card.querySelector(".metadata-button");
                     //additional node
                     additional_node = card.querySelector(".actions .additional");
+                    try {
+                        const tmp = card.querySelector(".actions .name");
+                        tmp.parentNode.insertBefore(tmp, tmp.previousElementSibling);
+                    } catch (error) {}
+
                     //get ul node, which is the parent of all buttons
                     ul_node = card.querySelector(".actions .additional ul");
+                    if (!ul_node){
+                        additional_node.appendChild(document.createElement('ul'))
+                        ul_node = card.querySelector(".actions .additional ul");
+                    }
                     // replace preview text button
                     replace_preview_btn = card.querySelector(".actions .additional a");
+                    if (!replace_preview_btn){
+                        ul_node.appendChild(document.createElement('a'))
+                        replace_preview_btn = card.querySelector(".actions .additional a");
+                    }
 
                     // check thumb mode
                     if (is_thumb_mode) {
@@ -527,7 +540,7 @@ onUiLoaded(() => {
                             if (ul_node) {
                                 // find all .a child nodes
                                 let atags = ul_node.querySelectorAll("a");
-                                
+
                                 for (let atag of atags) {
                                     //reset display
                                     atag.style.display = null;
@@ -678,7 +691,7 @@ onUiLoaded(() => {
 
                 }
 
-                
+
             }
         }
 
@@ -723,6 +736,5 @@ onUiLoaded(() => {
 
 
 });
-
 
 
